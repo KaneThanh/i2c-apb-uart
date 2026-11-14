@@ -1,0 +1,21 @@
+# ModelSim / Questa
+work/
+transcript
+modelsim.ini
+*.wlf
+# Waveform
+*.vcd
+*.fst
+# Yosys
+syn/*
+!syn/.gitkeep
+!syn/reports/
+# Quartus
+db/
+incremental_db/
+output_files/
+*.qws
+# LibreLane
+runs/
+# Python
+__pycache__/
