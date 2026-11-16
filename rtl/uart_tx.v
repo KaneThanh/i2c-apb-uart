@@ -13,7 +13,7 @@ module uart_tx
   localparam [2:0] S_IDLE = 3'd0, S_WAIT_CTS = 3'd1, S_START = 3'd2,
                    S_DATA = 3'd3, S_PARITY = 3'd4, S_STOP = 3'd5;
 
-  reg [2:0] state_q;
+  (* fsm_encoding = "none" *) reg [2:0] state_q;  // keep binary: Yosys one-hot recoding breaks eqy name matching (LEC, G6)
   reg       tx_q, done_q, par_q, stop_idx_q;
   reg [2:0] bit_idx_q;
   reg [3:0] tick_cnt_q;
