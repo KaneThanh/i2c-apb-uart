@@ -1,0 +1,33 @@
+{
+  "//": "Harden riêng apb_uart, CHỈ để có netlist + SDF tt/ss/ff cho GLS 20 test công khai (phương án D1-b).",
+  "//": "Layout này KHÔNG được tape-out. Trạng thái: [CHƯA XÁC MINH] — chưa chạy.",
+  "//": "Chạy (trong nix-shell LibreLane 3.0.14, từ gốc repo):",
+  "//": "  librelane --pdk-root ~/.ciel flow/librelane_apb_uart/config.json",
+  "//": "Kết quả: flow/librelane_apb_uart/runs/<tag>/final/{nl,sdf}/",
+
+  "DESIGN_NAME": "apb_uart",
+  "VERILOG_FILES": [
+    "dir::../../src/sync_2ff.v",
+    "dir::../../src/baud_gen.v",
+    "dir::../../src/uart_tx.v",
+    "dir::../../src/uart_rx.v",
+    "dir::../../src/uart_regs.v",
+    "dir::../../src/apb_uart_core.v",
+    "dir::../../src/apb_uart.v"
+  ],
+
+  "CLOCK_PORT": "pclk",
+  "CLOCK_PERIOD": 40,
+  "PNR_SDC_FILE": "dir::../constraints/apb_uart.sdc",
+  "SIGNOFF_SDC_FILE": "dir::../constraints/apb_uart.sdc",
+
+  "//": "Tự tính kích thước die từ diện tích (~9 000 µm² logic); 92 chân tín hiệu cần chu vi đủ lớn.",
+  "FP_SIZING": "relative",
+  "FP_CORE_UTIL": 40,
+  "PL_TARGET_DENSITY_PCT": 55,
+
+  "PL_RESIZER_HOLD_SLACK_MARGIN": 0.1,
+  "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.05,
+  "RUN_LINTER": true,
+  "RUN_KLAYOUT_XOR": false
+}
