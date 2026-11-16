@@ -19,9 +19,9 @@ STA       ?= sta
 BUILD     := $(ROOT)/build
 RUN       ?= $(ROOT)/runs/wokwi
 
-CORE_SRC  := $(addprefix $(ROOT)/src/,sync_2ff.v baud_gen.v uart_tx.v uart_rx.v uart_regs.v apb_uart_core.v)
-APB_SRC   := $(CORE_SRC) $(ROOT)/src/apb_uart.v
-TT_SRC    := $(CORE_SRC) $(ROOT)/src/spi2apb.v $(ROOT)/src/tt_um_hust_apb_uart.v
+CORE_SRC  := $(addprefix $(ROOT)/rtl/,sync_2ff.v baud_gen.v uart_tx.v uart_rx.v uart_regs.v apb_uart_core.v)
+APB_SRC   := $(CORE_SRC) $(ROOT)/rtl/apb_uart.v
+TT_SRC    := $(CORE_SRC) $(ROOT)/rtl/spi2apb.v $(ROOT)/rtl/tt_um_hust_apb_uart.v
 
 APB_NL    := $(BUILD)/syn/apb_uart/apb_uart.nl.v
 TT_NL     := $(BUILD)/syn/tt_um_hust_apb_uart/tt_um_hust_apb_uart.nl.v
@@ -58,16 +58,16 @@ sta_pre: synth
 	$(call sta_run,apb_uart,$(APB_NL),constraints/apb_uart.sdc,$(LIB_TT),tt,1,)
 	$(call sta_run,apb_uart,$(APB_NL),constraints/apb_uart.sdc,$(LIB_SS),ss,1,)
 	$(call sta_run,apb_uart,$(APB_NL),constraints/apb_uart.sdc,$(LIB_FF),ff,1,)
-	$(call sta_run,tt_um_hust_apb_uart,$(TT_NL),$(ROOT)/src/tt_um_hust_apb_uart.sdc,$(LIB_TT),tt,1,)
-	$(call sta_run,tt_um_hust_apb_uart,$(TT_NL),$(ROOT)/src/tt_um_hust_apb_uart.sdc,$(LIB_SS),ss,1,)
-	$(call sta_run,tt_um_hust_apb_uart,$(TT_NL),$(ROOT)/src/tt_um_hust_apb_uart.sdc,$(LIB_FF),ff,1,)
+	$(call sta_run,tt_um_hust_apb_uart,$(TT_NL),constraints/tt_um_hust_apb_uart.sdc,$(LIB_TT),tt,1,)
+	$(call sta_run,tt_um_hust_apb_uart,$(TT_NL),constraints/tt_um_hust_apb_uart.sdc,$(LIB_SS),ss,1,)
+	$(call sta_run,tt_um_hust_apb_uart,$(TT_NL),constraints/tt_um_hust_apb_uart.sdc,$(LIB_FF),ff,1,)
 	@for f in $(BUILD)/sta/*/*/summary.rpt; do echo "== $$f"; cat $$f; done
 
 # Kiểm tra chéo STA sau route (LibreLane đã tự làm 9 corner; xem `make metrics`)
 SPEF_NOM := $(RUN)/final/spef/nom/tt_um_hust_apb_uart.nom.spef
 sta_post:
-	$(call sta_run,tt_um_hust_apb_uart,$(TT_PNR_NL),$(ROOT)/src/tt_um_hust_apb_uart.sdc,$(LIB_SS),ss_post,0,$(SPEF_NOM))
-	$(call sta_run,tt_um_hust_apb_uart,$(TT_PNR_NL),$(ROOT)/src/tt_um_hust_apb_uart.sdc,$(LIB_FF),ff_post,0,$(SPEF_NOM))
+	$(call sta_run,tt_um_hust_apb_uart,$(TT_PNR_NL),constraints/tt_um_hust_apb_uart.sdc,$(LIB_SS),ss_post,0,$(SPEF_NOM))
+	$(call sta_run,tt_um_hust_apb_uart,$(TT_PNR_NL),constraints/tt_um_hust_apb_uart.sdc,$(LIB_FF),ff_post,0,$(SPEF_NOM))
 
 # ---- G6: LEC ---------------------------------------------------------------
 lec_syn: synth

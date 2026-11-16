@@ -12,7 +12,7 @@ Commit được chấm: `__________` (tag `v1.0`), ngày `__/11/2026`.
 | 3 | Yosys `proc`: 0 latch | `build/syn/*/latch_check.rpt` | ☐ | |
 | 4 | Một net clock `pclk`, không clock sinh bằng logic | `check_setup` trong `build/sta/*/check_setup.rpt`; CTS chỉ có 1 cây | ☐ | |
 | 5 | `rx`, `cts_n` (và SPI) qua 2 FF đồng bộ | RTL `sync_2ff`; netlist có `u_sync_*` | ☐ | |
-| 6 | Không `initial`, `#delay`, `$display`, không gọi cell `sky130_` trong `src/` | `grep -nE "initial\|#[0-9]\|\\$display\|sky130_" src/*.v` | ☐ | |
+| 6 | Không `initial`, `#delay`, `$display`, không gọi cell `sky130_` trong `rtl/` | `grep -nE "initial\|#[0-9]\|\\$display\|sky130_" rtl/*.v` | ☐ | |
 
 ## G4 — netlist (18/11)
 
