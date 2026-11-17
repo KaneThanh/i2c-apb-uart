@@ -19,3 +19,5 @@ output_files/
 runs/
 # Python
 __pycache__/
+# Testbench runner output
+tb/run-*/
