@@ -89,4 +89,4 @@ python -I -X utf8 tb/run.py --questa-bin C:/questasim64_10.7c/win64 --rtl @rtl
 
 Kỳ vọng: 86/86 PASS. Sau đó cập nhật kết quả vào `docs/Testplan/FEATURE_testbenches.md` và bản gốc trong workspace testplan.
 
-Trạng thái ngày 2026-11-21: dòng 58 chưa sửa. Theo quy tắc dự án, testbench không tự sửa `rtl/`; người phụ trách RTL sửa.
+Trạng thái ngày 2026-11-21: người phụ trách RTL đã sửa dòng 58 thành `assign pslverr = access & presetn & (e1 | e2 | e3 | e4 | e5);`. Chạy lại cùng ngày (QuestaSim 10.7c, seed 1): T-1.2.2 PASS, cả bộ **86/86 PASS**; 20 test P của thầy vẫn PASS với seed 1, 7, 2026.

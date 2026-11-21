@@ -11,6 +11,7 @@ Nguồn triển khai là [TESTPLAN.md](TESTPLAN.md), đặc biệt Phần 1–3 
 | Rà soát 2026-11-17 | Đối chiếu ca với TESTPLAN.md, sửa 4 chỗ yếu hơn testplan: ngưỡng CTS 59 → 80 ns (H-16, T-2.9.3.1); H-19 kiểm `tx=1` liên tục sau soft reset giữa khung; T-1.2.2 đặt đủ điều kiện đầu (CFG 0x1B, IER 0x07, `rx_done=1`, `irq=1`, TX giữa khung); C-04 thêm TX đang phát; T-1.1.1.5 đưa CFG về 0x03 và TXDATA 0x41. Biên dịch lại 91 file: 0 lỗi, 0 cảnh báo. Chưa chạy trên RTL đích. |
 | Đưa vào repo thiết kế 2026-11-17 | Copy vào `APB_UART_Git/i2c-apb-uart/tb/` (`common/`, `unit/`, `cases/`, `run.py`, `README.md`) và `docs/Testplan/FEATURE_testbenches.md`; thêm `tb/run-*/` vào `.gitignore`. `run.py` sửa để chạy được cả bố cục phẳng (`testbenches/`) lẫn bố cục repo. Repo có đủ 9 file RTL: biên dịch 91 file testbench cùng RTL không lỗi; H-01, H-02, H-20 PASS trên RTL thật. Chưa chạy đủ 86 ca. Dòng "Mô phỏng RTL mục tiêu" bên dưới là trạng thái cũ. |
 | Regression 86 ca trên RTL thật 2026-11-17 | `tb/run.py` với 9 file RTL của `i2c-apb-uart/rtl`, QuestaSim 10.7c, seed 1: **85/86 PASS**. FAIL: T-1.2.2 (xem dưới). `regression.ucdb` gộp có độ phủ code theo file 89,29 % (số lọc của vcover); chưa tách statement/branch của RTL để so ngưỡng 90 %. |
+| Sửa lỗi T-1.2.2 và chạy lại 2026-11-21 | `rtl/uart_regs.v:58` thêm `& presetn` vào `pslverr`. Regression 86 ca, QuestaSim 10.7c, seed 1: **86/86 PASS**. 20 test P của khung chấm `apb-uart-sinh-vien` PASS với seed 1, 7, 2026. |
 | Mô phỏng RTL mục tiêu | Chưa chạy được. RTL tại `D:/APB_UART/APB_UART/sources/rtl` thiếu `apb_uart`, `apb_uart_core` và `tt_um_hust_apb_uart`. Elaborate H-01, H-20 và C-12 báo thiếu đúng các module này. |
 | Hoàn thiện Phần 5 | Còn các mục dưới đây. Chưa có kết luận đạt tiêu chí nghiệm thu hoặc đạt độ phủ trên DUT. |
 
@@ -24,6 +25,7 @@ Nguồn triển khai là [TESTPLAN.md](TESTPLAN.md), đặc biệt Phần 1–3 
 ## Lỗi RTL phát hiện (không sửa trong `rtl/`)
 
 - **T-1.2.2** (REQ-IO-02, Spec ID 1.2.2 / 2.6.1): hạ `presetn=0` giữa pha access của lệnh ghi lỗi (`W 020`, `psel=penable=1`) thì `pslverr` vẫn bằng 1, mong đợi 0. `rtl/uart_regs.v:58`: `assign pslverr = access & (e1 | e2 | e3 | e4 | e5);` với `access = psel & penable` (dòng 26), không có điều kiện `presetn`. Thêm `& presetn` vào `pslverr` là đủ. Các output khác (`tx`, `rts_n`, `irq`, `pready`) về giá trị reset đúng.
+- **Đã sửa 2026-11-21:** dòng 58 thành `assign pslverr = access & presetn & (e1 | e2 | e3 | e4 | e5);`; T-1.2.2 PASS, regression 86/86 PASS.
 
 ## Còn mở
 

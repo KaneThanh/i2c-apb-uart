@@ -55,7 +55,7 @@ module uart_regs
   wire unused = &{1'b0, pwdata[31:16]};
 
   assign pready      = 1'b1;
-  assign pslverr     = access & (e1 | e2 | e3 | e4 | e5);
+  assign pslverr = access & presetn & (e1 | e2 | e3 | e4 | e5);
   assign prdata      = prdata_r;
   assign srst        = srst_q;
   // tx_dis = 1: start_tx is dropped and tx_done stays 1 (team decision on open question Q2)
